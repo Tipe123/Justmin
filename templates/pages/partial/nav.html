@@ -1,0 +1,49 @@
+{% load static %}
+{% block header_links %}
+<link rel="stylesheet" href="{% static 'css/main/nav.css' %}">
+{% endblock %}
+
+
+<nav class="navbar_">
+    <div class="content_">
+        <div class="logo_">
+            <a href="#">Justmin</a>
+        </div>
+
+        <div>
+            
+            <ul class="menu-list_">
+                <div class="icon cancel-btn_">
+                <i class="fas fa-times"></i>
+            </div>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+            <div class="icon menu-btn_">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<script type="text/javascript">
+    const navbar = document.querySelector('.navbar_')
+    const menu = document.querySelector('.menu-list_');
+    const  menuBtn = document.querySelector('.menu-btn_');
+    const cancelBtn = document.querySelector('.cancel-btn_');
+
+    menuBtn.onclick = () =>{
+        menu.classList.add('active')
+        menuBtn.classList.add('hide')
+    }
+
+    cancelBtn.onclick = () =>{
+        menu.classList.remove('active')
+        menuBtn.classList.remove('hide')
+    }
+
+    window.onscroll = () => {
+        this.scrollY > 20 ? navbar.classList.add('sticky') : navbar.classList.remove('sticky');
+    }
+</script>

@@ -1,0 +1,283 @@
+{% extends 'registration/another_base.html' %}
+
+{% load static %}
+
+
+{% block header_links %}
+<link rel="stylesheet" href="{% static 'css/pages/house.css' %}">
+{% endblock %}
+
+{% block title %}
+
+Add room
+
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-12">
+<header class = "header" id = "header" style="height:300px; background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2)), url('{% static 'images/img1.jpg' %}") center/cover no-repeat;"> 
+  <div class = "head-bottom flex mt-5">
+	<p style="width:20%; height:150px; font-size: 20px; border: 1px solid rgba(253, 253, 253, 0); padding:15px; background-color: rgba(255, 0, 0, 0); color:black;margin-top: 10px; border-radius:50%;">
+	<img src="{{ profile_item.profile_picture.url }}" alt="" width="90px" height="150px" style="border-radius:50%; ">
+	</p>
+</div>
+
+  </header>
+
+</div>
+<!-- <div class="col-md-5">
+	<ul class="navbar" style="color: black;">
+		<li>{{profile_item.house_name}}</li>
+		<li>{{profile_item.city}}</li>
+		<li>{{profile_item.town}}</li>
+		<li>{{profile_item.}}</li>
+	</ul> -->
+</div>
+</div>
+<div class="w3-container list_of_rooms_hearder">
+	<h2><i class="fas fa-list"> </i><b> List of Rooms</b></h2>
+	<div class="d-flex justify-content-center mb-4">
+		<h2>We have {{length}} rooms available</h2>
+	</div>
+	
+	{% if pk_of_owner == user.id and number_of_rooms != house_obj.number_of_rooms %}
+		{% if number_of_rooms < house_obj.number_of_rooms %}
+	<h3><b>You can still post rooms you have {{number_of_rooms}} <i>ROOMS</i> out of {{house_obj.number_of_rooms}} <i>ROOMS</i></b></h3>
+	
+		{% else %}
+		<h3><b>You can no longer post you have {{number_of_rooms}} <i>ROOMS</i> out of {{house_obj.number_of_rooms}} <i>ROOMS</i></b></h3>
+		{% endif %}
+		<hr>
+	{% endif %}
+   </div>
+   <div class="d-flex justify-content-center">
+	<div class="row container">
+		<div class="col-md-2 mt-5" style="align-items:center;">
+			<b >
+				FILTERS
+				<hr width="70%" style="height:5px; color:rgb(0, 255, 170) ">
+			</b>
+		</div>
+		<div class="list_all_rooms col-md-3" id="list_all">
+		 <button style="background-color: rgb(83, 122, 21); height:90px;" class="btn" >List all Rooms</button>
+		</div>
+		<div class="col-md-3" id="available">
+		 <button class="btn btn-secondary" style="background-color:rgb(13, 63, 110) ; height:90px;">Show available Rooms</button>
+		 </div>
+		 <div class="col-md-3" id="taken">
+			 <button class="btn btn-primary" style="background-color:rgb(0, 64, 72) ; height:90px;">Show Taken rooms</button>
+		 </div>
+	 
+	</div>
+   </div>
+   
+
+<div class="w3-row-padding w3-padding-16 mx-5" id="available_list">
+	{% for room in available_rooms %}
+<div class="w3-third w3-margin-bottom border p-3 mx-5  bg-white">
+	<h3>{{room.type_of_room}}</h3>
+	{% if room.picture_main %}
+	<img src="{{ room.picture_main.url }}" alt="Kayla" style="width:100%" height="200px">
+	{% else%}
+	<img src="{% static 'images/img3.jpg' %}" alt="Kayla" style="width:100%" height="200px">
+	{% endif %}
+	<div class="w3-container w3-white">
+
+		<h6 class="w3-opacity">Price : R {{room.price}}</h6>
+		<p class="w3-large"><i class="fa fa-bath mx-2"></i> <i class="fa fa-phone mx-2"></i> <i class="fa fa-wifi mx-2"></i></p>
+		<div class="apartment-rating">
+			<i class="fa fa-star rating"></i>
+			<i class="fa fa-star rating"></i>
+			<i class="fa fa-star-half rating"></i>
+			<i class="fa fa-star-empty rating"></i>
+			<i class="fa fa-star-empty rating"></i>
+		</div>
+		
+		<button class="w3-button w3-block w3-black w3-margin-bottom" ><a href="{% url 'advert:room_detail' room.id %}">view more</a></button>
+		{% if pk_of_owner != user.id %}
+		{% if not room.occupation.taken %}
+		<button class="w3-button w3-block w3-black w3-margin-bottom" ><a href="{% url 'advert:occupation' room.id %}">book room</a></button>
+		{% else %}
+		<button class="w3-button w3-block w3-black w3-margin-bottom" disabled>Room already taken</button>
+		{% endif %}
+
+		{% endif %}
+
+	</div>
+	{% if pk_of_owner == user.id %}
+	<div class="row">
+		<div class="col-md-6">
+			<a href="{% url 'advert:delete' room.id %}" class="btn btn-danger">Delete</a>
+		</div>
+		<div class="col-md-6">
+			<a href="{% url 'advert:room_update' room.id %}" class="btn btn-primary">Update</a>
+		</div>
+	</div>
+	{% endif %}
+</div>
+{% endfor %}
+
+</div>
+
+<div class="w3-row-padding w3-padding-16 mx-5" id="taken_list" hidden>
+	{% for room in taken_rooms %}
+<div class="w3-third w3-margin-bottom border p-3 mx-5  bg-white">
+	<h3>{{room.type_of_room}}</h3>
+	{% if room.picture_main %}
+	<img src="{{ room.picture_main.url }}" alt="Kayla" style="width:100%" height="200px">
+	{% else%}
+	<img src="{% static 'images/img3.jpg' %}" alt="Kayla" style="width:100%" height="200px">
+	{% endif %}
+	<div class="w3-container w3-white">
+
+		<h6 class="w3-opacity">Price : R {{room.price}}</h6>
+		<p class="w3-large"><i class="fa fa-bath mx-2"></i> <i class="fa fa-phone mx-2"></i> <i class="fa fa-wifi mx-2"></i></p>
+		<div class="apartment-rating">
+			<i class="fa fa-star rating"></i>
+			<i class="fa fa-star rating"></i>
+			<i class="fa fa-star-half rating"></i>
+			<i class="fa fa-star-empty rating"></i>
+			<i class="fa fa-star-empty rating"></i>
+		</div>
+		
+		<button class="w3-button w3-block w3-black w3-margin-bottom" ><a href="{% url 'advert:room_detail' room.id %}">view more</a></button>
+		{% if pk_of_owner != user.id %}
+		{% if not room.occupation.taken %}
+		<button class="w3-button w3-block w3-black w3-margin-bottom" ><a href="{% url 'advert:occupation' room.id %}">book room</a></button>
+		{% else %}
+		<button class="w3-button w3-block w3-black w3-margin-bottom" disabled>Room already taken</button>
+		{% endif %}
+
+		{% endif %}
+
+	</div>
+	{% if pk_of_owner == user.id %}
+	<div class="row">
+		<div class="col-md-6">
+			<a href="{% url 'advert:delete' room.id %}" class="btn btn-danger">Delete</a>
+		</div>
+		<div class="col-md-6">
+			<a href="{% url 'advert:room_update' room.id %}" class="btn btn-primary">Update</a>
+		</div>
+	</div>
+	{% endif %}
+</div>
+{% endfor %}
+
+</div>
+
+<div class="w3-row-padding w3-padding-16 mx-5" id="all" hidden>
+	{% for room in house %}
+<div class="w3-third w3-margin-bottom border p-3 mx-5  bg-white">
+	<h3>{{room.type_of_room}}</h3>
+	{% if room.picture_main %}
+	<img src="{{ room.picture_main.url }}" alt="Kayla" style="width:100%" height="200px">
+	{% else%}
+	<img src="{% static 'images/img3.jpg' %}" alt="Kayla" style="width:100%" height="200px">
+	{% endif %}
+	<div class="w3-container w3-white">
+
+		<h6 class="w3-opacity">Price : R {{room.price}}</h6>
+		<p class="w3-large"><i class="fa fa-bath mx-2"></i> <i class="fa fa-phone mx-2"></i> <i class="fa fa-wifi mx-2"></i></p>
+		<div class="apartment-rating">
+			<i class="fa fa-star rating"></i>
+			<i class="fa fa-star rating"></i>
+			<i class="fa fa-star-half rating"></i>
+			<i class="fa fa-star-empty rating"></i>
+			<i class="fa fa-star-empty rating"></i>
+		</div>
+		
+		<button class="w3-button w3-block w3-black w3-margin-bottom" ><a href="{% url 'advert:room_detail' room.id %}">view more</a></button>
+		{% if pk_of_owner != user.id %}
+		{% if not room.occupation.taken %}
+		<button class="w3-button w3-block w3-black w3-margin-bottom" ><a href="{% url 'advert:occupation' room.id %}">book room</a></button>
+		{% else %}
+		<button class="w3-button w3-block w3-black w3-margin-bottom" disabled>Room already taken</button>
+		{% endif %}
+
+		{% endif %}
+
+	</div>
+	{% if pk_of_owner == user.id %}
+	<div class="row">
+		<div class="col-md-6">
+			<a href="{% url 'advert:delete' room.id %}" class="btn btn-danger">Delete</a>
+		</div>
+		<div class="col-md-6">
+			<a href="{% url 'advert:room_update' room.id %}" class="btn btn-primary">Update</a>
+		</div>
+	</div>
+	{% endif %}
+</div>
+{% endfor %}
+
+</div>
+
+
+{% if pk_of_owner == user.id and number_of_rooms != house.number_of_rooms %}
+<div class="container">
+	<div class="row mt-5 ">
+		<div class="col-md-6 offset-md-3">
+			<div class="border p-3 bg-white" style="box-shadow: 0px -1px 10px 10px rgba(0, 0, 0, 0.33);">
+				<h3>Add Your Rooms </h3>
+				<hr>
+				<form action="" method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+
+					{{form|crispy}}
+
+					<input class="btn btn-success" type="submit" value="Save Room">
+				</form>
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}
+
+<!-- Footer -->
+<footer class="w3-padding-32 w3-black w3-center w3-margin-top ">
+	<h5>Find Us On</h5>
+	<div class="w3-xlarge w3-padding-16 ">
+		<i class="fa fa-facebook-official w3-hover-opacity "></i>
+		<i class="fa fa-instagram w3-hover-opacity "></i>
+		<i class="fa fa-twitter w3-hover-opacity "></i>
+		<i class="fa fa-whatsapp w3-hover-opacity "></i>
+	</div>
+</footer>
+
+<script>
+	const available = document.getElementById("available");
+	const taken = document.getElementById("taken");
+	const list_all = document.getElementById("list_all")
+
+	const available_list = document.getElementById("available_list");
+	const taken_list = document.getElementById("taken_list");
+	const all = document.getElementById("all")
+	
+	console.log(available);
+	console.log(available_list)
+
+	available.addEventListener('click' ,() =>{
+		available_list.hidden = false;
+		taken_list.hidden=true;
+		all.hidden = true; 
+	});
+
+	taken.addEventListener('click',()=>{
+		taken_list.hidden=false;
+		available_list.hidden = true;
+		all.hidden = true; 
+	});
+
+	list_all.addEventListener('click',()=>{
+		taken_list.hidden=true;
+		available_list.hidden = true;
+		all.hidden = false; 
+	})
+
+</script>
+{% endblock %}

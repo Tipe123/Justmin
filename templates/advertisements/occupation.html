@@ -1,0 +1,33 @@
+{% extends 'registration/another_base.html' %}
+
+{% load static %}
+
+{% block title %}
+   Take The Room
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+	<div class="row mt-5">
+		<div class="col-md-6 offset-md-3">
+			<div class="border p-3">
+				<h3>When can we expect you</h3>
+				<hr>
+				<form method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+
+					<div id="div_id_set_move_in_date" class="form-group"> <label for="id_set_move_in_date" class=" requiredField">
+                        Set move in date<span class="asteriskField">*</span> </label> <div class=""> 
+                            <input type="date" name="set_move_in_date" class="dateinput is-invalid" required id="id_set_move_in_date"> <p id="error_1_id_set_move_in_date" class="invalid-feedback"><strong>This field is required.</strong></p> </div> </div>
+                    
+
+					<input class="btn btn-success" type="submit" value="Take Room">
+				</form>
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

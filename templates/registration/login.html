@@ -18,16 +18,18 @@
 
 				
 					
-				{% elif time.hour >= 10 %}
+				{% elif time.hour >= 10 and time.hour < 16 %}
 
 
 				Good afternoon i hope you are having a great day Good luck , put on more effort everyday
 				
 
-				{% elif time.hour >= 16  %}
+				{% elif time.hour >= 16  and time.hour < 20 %}
 				
 					Good evining hope you had a great day sit well and drink some hot tea 
 
+				{% else %}
+					Good night you can come back tommorow
 				{% endif %}
 			</p>
 		</div>

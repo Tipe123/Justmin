@@ -36,7 +36,7 @@ class UserAccount(AbstractBaseUser , PermissionsMixin):
     cellphone       = models.CharField(max_length=15, unique = True)
     is_active       = models.BooleanField(default=True)
     is_staff        = models.BooleanField(default=False)
-    # type_of_user    = models.ForeignKey(TypeOfUser,on_delete=models.CASCADE)
+    
 
     objects = UserAccountManager()
 
@@ -53,3 +53,72 @@ class UserAccount(AbstractBaseUser , PermissionsMixin):
         return self.email
 
 
+class Profile(models.Model):
+    staff = models.OneToOneField(UserAccount , on_delete=models.CASCADE , null=True)
+    bio = models.TextField(max_length=200)
+    main_picture = models.ImageField(default= 'avatar.jpg' , upload_to= "Main_Images")
+    profile_picture = models.ImageField(default = 'avatar.jpg' , upload_to = "Proile_Images")
+    
+
+    class Meta:
+        verbose_name_plural = "User Profile Picture"
+    
+    def __str__(self):
+        return f'{self.staff.first_name} {self.staff.last_name}- Profile'
+
+# For Advertisement
+
+
+ROOM__TYPE = (
+    ("Sharing","Sharing"),
+    ("Single","Single"),
+    )
+
+# Create your models here.
+class House(models.Model):
+    house_name = models.CharField(max_length=50)
+    number_of_rooms = models.PositiveIntegerField()
+    city = models.CharField(max_length=50)
+    suburb = models.CharField(max_length=50)
+    address = models.CharField(max_length=50)
+    stree_name = models.CharField(max_length=50)
+    picture_main = models.ImageField(upload_to="Houses",blank=True)
+    author = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.house_name
+
+class Room(models.Model):
+    price = models.PositiveIntegerField()
+    house = models.ForeignKey(House,on_delete=models.CASCADE)
+    type_of_room = models.CharField(max_length=50, choices=ROOM__TYPE, default="Single")
+    
+    picture_main = models.ImageField(upload_to='Rooms',blank=True)
+    picture_sub1 = models.ImageField(upload_to='Rooms',blank=True)
+    picture_sub2 = models.ImageField(upload_to='Rooms',blank=True)
+    
+    def __str__(self):
+        return f'{self.house.house_name} - {self.house.stree_name} price : {self.price}'
+
+# In this model we want to assign a user a type of room
+class Occupation(models.Model):
+    owner = models.OneToOneField(UserAccount , on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    set_move_in_date = models.DateTimeField()
+    taken = models.BooleanField( default = False)
+    room = models.OneToOneField(Room , on_delete=models.DO_NOTHING)
+
+    class Meta:
+        verbose_name_plural = "Users Occupations"
+
+    def __str__(self):
+        return f'{self.owner.email}s room' 
+
+
+class Location(models.Model):
+
+    house = models.OneToOneField(House , on_delete=models.CASCADE)
+    longitude = models.CharField(max_length=100)
+    latitude = models.CharField(max_length=100)
+    created_at = models.DateField(auto_now=True)
+    

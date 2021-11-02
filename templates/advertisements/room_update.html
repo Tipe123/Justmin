@@ -1,0 +1,31 @@
+{% extends 'registration/another_base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Update Room
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+	<div class="row mt-5">
+		<div class="col-md-6 offset-md-3">
+			<div class="border p-3">
+				<h3>Update the room</h3>
+				<hr>
+				<form method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+
+					{{room_form|crispy}}
+                    
+
+					<input class="btn btn-success" type="submit" value="Update">
+				</form>
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

@@ -1,9 +1,17 @@
 {% extends 'registration/another_base.html' %}
+{% load static %}
 {% block title %}
 	User Profile
 {% endblock title %}
+
+{% block header_links %}
+<link rel="stylesheet" href="{% static 'css/pages/timeline.css' %}">
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
 {% block content %}
-<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow mt-0" >
   <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="{% url 'accounts:home' %}">Room Locator</a>
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -23,86 +31,189 @@
   <div class="row">
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="position-sticky pt-3">
+        <h4 class="mx-5">{{now|date:"l"}}</h4>
         <ul class="nav flex-column">
-          <li class="nav-item">
+          <li class="nav-item mt-2 ">
             <a class="nav-link active" aria-current="page" href="#">
               <span data-feather="home"></span>
-              Dashboard
+              Home 
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item mt-2">
             <a class="nav-link" href="#">
               <span data-feather="file"></span>
-              Platform
+              Map View
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="shopping-cart"></span>
-              
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="users"></span>
-              <a href="{% url 'accounts:edit_profile' %}"> Change status </a>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
+          
+          
+          <li class="nav-item mt-2">
+            <a class="nav-link" href="{% url 'accounts:edit_profile' %}">
               <span data-feather="bar-chart-2"></span>
-              Reports
+              Change status
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item mt-2">
             <a class="nav-link" href="#">
               <span data-feather="layers"></span>
-              Integrations
+              List Of Tenants
             </a>
           </li>
+          {% if pk_of_owner == user.id %}
+          <li class="nav-item mt-2">
+            <a class="nav-link" href="{% url 'advert:edit_profile' %}">
+              <span data-feather="layers"></span>
+              Update Profile
+            </a>
+          </li>
+          {% endif %}
         </ul>
 
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-          <span>ACCOUNT SPECIFIC</span>
-          <a class="link-secondary" href="#" aria-label="Add a new report">
-            <span data-feather="plus-circle"></span>
-          </a>
-        </h6>
-        <ul class="nav flex-column mb-2">
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file-text"></span>
-              Profile
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file-text"></span>
-              <a href="{% url 'accounts:edit_profile' %}"  style="color: black;"> Change status </a>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file-text"></span>
-              Settings
-            </a>
-          </li>
-        </ul>
+        
+       
+         
       </div>
     </nav>
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">
-            {{ request.user.first_name|upper }} {{request.user.last_name|upper}}</h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
-          <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+    <main class="col-md-9 ms-sm-auto col-lg-10">
+      <div class="row" >
+        <header class = "header" id = "header" style="height:300px; background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2)), url('{{ profile_item.main_picture.url }}") center/cover no-repeat;"> 
+          <div class = "head-bottom flex mt-4">
+            <p style="width:50%; font-size: 20px; border: 1px solid white; padding:15px; background-color: #fff; color:black;margin-top: 20px;">
+            {% if profile_item.bio %}
+              {{profile_item.bio}}
+              {% elif user.is_staff %}
+                You can add a short description your services of your rooms
+              {% else %}
+              You can add a short discription about your self
+              {% endif %}
+            </p>
+        </div>
+        <div class = "head-bottom flex mt-3">
+          <p style="width:20%; height:150px; font-size: 20px; border: 1px solid rgba(253, 253, 253, 0); padding:15px; background-color: rgba(255, 0, 0, 0); color:black;margin-top: 10px; border-radius:50%;">
+          <img src="{{ profile_item.profile_picture.url }}" alt="" width="90px" height="170px" style="border-radius:50%; ">
+          </p>
+      </div>
+        </header>
+      </div>
+      <!-- ================ User name Portion =========== -->
+      <div class="row mt-5">
+      <h3 class="mt-5 d-flex justify-content-center">{{username.first_name}} {{username.last_name}}</h3>
+      </div>
+      
+      
+      <div class="row  d-flex justify-content-center  mt-5">
+        {% if user.is_staff %}
+        <div class="col-md-5 d-flex justify-content-center mt-5">
+          
+            <div class="border p-3 mt-3" style="width: 90%; height:810px;  box-shadow:0px -4px 10px 10px rgba(0, 0, 0, 0.433); background-color: rgb(255, 255, 255);">
+              <h3>Add Your House</h3>
+              <hr>
+              <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+      
+                {{form|crispy}}
+      
+                <input class="btn btn-success" type="submit" value="Add house">
+              </form>
+      
+            
           </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-            <span data-feather="calendar"></span>
-            View Details
-          </button>
+        </div>
+        {% endif %}
+        <div class="col-md-7 d-flex justify-content-center">
+         
+          <!-- ============ START OF THE CARD ========= -->
+           <!-- <div class="house_box ">
+            
+             {% for house in house_owner.house_set.all %} 
+            
+             
+            <div class="border p-3 m-3">
+              <h4>{{ house.house_name }}</h4>
+            <div class="house_image">
+              <img src="{{ house.picture_main.url }}" alt="">
+            </div>
+            <div class="house_content">
+            
+              <div class="row mt-3">
+                <div class="col-6 d-flex justify-content-center">
+                  <h4>{{house.address}}</h4>
+                </div>
+                <div class="col-6 d-flex justify-content-center">
+                  <h4> <a href="{% url 'advert:house_detail' house.id %}" style="color: black;" class="btn btn-primary">View Rooms</a></h4>
+                </div>
+              </div>
+              {% if pk_of_owner == user.id %}
+              <div class="row">
+                <div class="col-md-6">
+                  <a href="{% url 'advert:update_house' house.id %}" class="btn btn-primary">Edit</a>
+                </div>
+                <div class="col-md-6">
+                  <a href="{% url 'advert:delete_house' house.id %}" class="btn btn-danger">Delete</a>
+                </div>
+
+              </div>
+              {% endif %}
+            </div>
+            </div>
+            {% endfor %}
+           
+           
+          </div>  -->
+          
+          <!-- END OF THE CARD -->
+           <div class="mx-5 timeline-container mt-5">
+           
+            {% for house in house_owner.house_set.all %}
+            <div class="event" style="background-color: rgb(255, 255, 255);">
+              <div class="event-date">{{house.count}}</div>
+              <h2>{{house.house_name | upper}}</h2>
+              <div class="timeline-content">
+                <div class="row mt-1">
+                  <div class="col-md-6">
+                    <div class="house_image mb-4" style="margin-left: -25px;">
+                      <img src="{{ house.picture_main.url }}" height="150px">
+                    </div>
+                    <ul style="list-style: none; margin-left:-50px;" >
+                      <li>Address : {{house.address}}</li>
+                      <li>Phone : {{house_owner.cellphone}}</li>
+                      <li>Email :{{house_owner.email }}</li>
+                    </ul>
+                    
+                    
+                  </div>
+                  <div class="col-md-6">
+
+                    <div class="row">
+                      <ul style="list-style: none;">
+                        <li>City : {{house.city}}</li>
+                        <li>Suburb : {{house.suburb}}</li>
+                      </ul>
+                      <div class="row" >
+                      <a href="{% url 'advert:house_detail' house.id %}" style="color: rgb(255, 255, 255); height:40px; width:70% ; font-size:small; background-color:rgb(0, 0, 0); margin-left:45px;" class="btn">View Rooms</a>
+                      </div>
+
+                      <div class="row" >
+                        <a href="{% url 'map:create_house_map' house.id %}" style="color: rgb(255, 255, 255); height:40px; width:70% ; font-size:x-small; background-color:rgb(0, 0, 0); margin-left:45px;" class="btn">Add Room To Map</a>
+                      </div>
+                    </div>
+                    {% if pk_of_owner == user.id %}
+                    <div class="row">
+                      <div class="col-md-6" >
+                        <a href="{% url 'advert:update_house' house.id %}" class="btn" style="background-color: rgb(0, 158, 194); width:70%; height:40px; font-size:x-small;">Edit</a>
+                      </div>
+                      <div class="col-md-6">
+                        <a href="{% url 'advert:delete_house' house.id %}" class="btn" style="background-color: rgb(255, 0, 0); width:70%; height:40px; font-size:x-small;">Delete</a>
+                      </div>
+      
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div> 
+          {% endfor %}
+        </div> 
         </div>
       </div>
     </main>

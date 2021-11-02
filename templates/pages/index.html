@@ -41,14 +41,18 @@ Room Locator
              <li><a href="#rooms">Rooms</a></li>
              <li><a href="#customers">Customers</a></li>
          </ul>
+         <button class="btn sign-up"><a href="{% url 'advert:timeline' %}">TimeLine</a></button>
+     <button class="btn sign-up"><a href="#">Blog</a></button>
          {% if request.user.is_authenticated %}
-         <button class="btn sign-up"><a href="{% url 'accounts:logout' %}">Logout</a></button>
-         <button class="btn log-in"><a href="{% url 'accounts:profile' %}">profile</a></button>
          
+         <button class="btn log-in"><a href="{% url 'advert:profile' request.user.id %}">profile</a></button>
+         <button class="btn sign-up"><a href="{% url 'accounts:logout' %}">Logout</a></button>
      {% else %}
+     
      <button class="btn sign-up"><a href="{% url 'accounts:register' %}">Sign up</a></button>
      <button class="btn log-in"><a href="{% url 'accounts:login' %}">Log in</a></button>
      {% endif %}
+     
        
      </div>
      <!-- end of side navbar-->

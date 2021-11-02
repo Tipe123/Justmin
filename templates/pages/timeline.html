@@ -1,0 +1,169 @@
+{% extends 'registration/another_base.html' %}
+{% load static %}
+
+{% block header_links %}
+<link rel="stylesheet" href="{% static 'css/pages/timeline.css' %}">
+<link rel="stylesheet" href="{% static 'css/main/nav.css' %}">
+{% endblock %}
+
+{% block title %}
+	Time Line
+{% endblock title %}
+
+{% block content %}
+
+{% include 'pages/partial/nav.html' %}
+
+<div class="timeline_pos  d-flex justify-content-center">
+
+
+<div class="mx-5 timeline-container mt-5">
+            <h2 class="mb-4 d-flex justify-content-center" style="background-color: rgb(255, 255, 255); box-shadow:0px -4px 3px 2px rgba(0, 0, 0, 0.22);">Houses</h2>
+            {% for house in houses %}
+            <div class="event inverted-corners" style="background-color: rgb(255, 255, 255);">
+              <div class="event-date">{{house.count}}</div>
+              <h2>{{house.house_name | upper}}</h2>
+              <div class="timeline-content">
+                <div class="row mt-1">
+                  <div class="col-md-6">
+                    <div class="house_image mb-4" style="margin-left: -25px;">
+                      <img src="{{ house.picture_main.url }}" height="150px">
+                    </div>
+                    <ul style="list-style: none; margin-left:-50px;" >
+                      <li>Address : {{house.address}}</li>
+                      <li>Phone : {{house.author.cellphone}}</li>
+                      <li>Email :{{house.author.email }}</li>
+                    </ul>
+                    
+                    
+                  </div>
+                  <div class="col-md-6">
+
+                    <div class="row">
+                      <ul style="list-style: none;">
+                        <li>City : {{house.city}}</li>
+                        <li>Suburb : {{house.suburb}}</li>
+                      </ul>
+                      <div class="row" >
+                      <a href="{% url 'advert:house_detail' house.id %}" style="color: rgb(255, 255, 255); height:40px; width:70% ; font-size:small; background-color:rgb(0, 0, 0); margin-left:45px;" class="btn">View Rooms</a>
+                      </div>
+
+                      <div class="row" >
+                        <a href="{% url 'map:create_house_map' house.id %}" style="color: rgb(255, 255, 255); height:40px; width:70% ; font-size:x-small; background-color:rgb(0, 0, 0); margin-left:45px;" class="btn">Add Room To Map</a>
+                      </div>
+                    </div>
+                    {% if house.author.id == user.id %}
+                    <div class="row">
+                      <div class="col-md-6" >
+                        <a href="{% url 'advert:update_house' house.id %}" class="btn" style="background-color: rgb(0, 158, 194); width:70%; height:40px; font-size:x-small;">Edit</a>
+                      </div>
+                      <div class="col-md-6">
+                        <a href="{% url 'advert:delete_house' house.id %}" class="btn" style="background-color: rgb(255, 0, 0); width:70%; height:40px; font-size:x-small;">Delete</a>
+                      </div>
+      
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div> 
+          {% endfor %}
+        </div> 
+      </div>
+  
+<div class="pagination  d-flex justify-content-center">
+  <span class="step-links">
+      {% if house_page.has_previous %}
+          <a href="?page={{ house_page.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current">
+          Page {{ house_page.number }} of {{ house_page.paginator.num_pages }}.
+      </span>
+
+      {% if house_page.has_next %}
+          <a href="?page={{ house_page.next_page_number }}">next</a>
+      {% endif %}
+  </span>
+</div>
+  
+</div>
+
+
+
+{% endblock %}
+<!-- 
+{% block contents %}
+<style>
+    img {
+     border-radius: 8px;
+
+    }
+
+   img:hover {
+      box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+     }
+     .header {
+        padding: 60px;
+        text-align: center;
+        background: #1abc9c;
+        color: white;
+        font-size: 30px;
+    }
+    .timeline{
+        margin-top: 10px;
+        background-color: rgb(255, 255, 255);
+    }
+    body{
+        background-color: rgb(238, 238, 238);
+    }
+
+</style>
+<section>
+
+    <div class="w3-top">
+        <div class="w3-bar w3-white w3-wide w3-padding w3-card">
+          <a href="{% url 'accounts:home' %}" class="w3-bar-item w3-button"><i class="fa fa-bed w3-margin-right"></i><b>Justmin</b> Time Line</a>
+          
+          <div class="w3-right w3-hide-small">
+           <form action="">
+               <input type="search" placeholder="Search" class="form-control">
+           </form>
+          </div>
+        </div>
+      </div>
+</section>
+<br>
+<section class="timeline">
+    <div class="row mt-5">
+        <div class="col-3 border p-3">
+          Still havent fiqured it out
+        </div>
+        <div class="col-9 p-3">
+            <div class="w3-container w3-padding-32" id="apartments">
+                <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">Apartments</h3>
+              </div>
+              <div class="w3-row-padding">
+          {% for house in houses %}
+          <div class="w3-col l3 m6 w3-margin-bottom border p-3 mx-4">
+            <div class="w3-display-container">
+              <a href="{% url 'advert:profile' house.author.id %}"><div class="w3-display-topleft w3-black w3-padding" style="border-top-left-radius:8px;">{{house.house_name}}</div></a>
+              <img src="{{ house.picture_main.url }}" alt="House" style="width:100%" height="150px">
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <p>number of rooms : {{house.number_of_rooms}}</p>
+                </div>
+                <div class="col-12 mt-1 ml-2">
+                   <p>{{house.address}}</p> 
+                </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        </div>
+    </div>
+</section>
+  
+  
+{% endblock %} -->

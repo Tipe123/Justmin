@@ -1,0 +1,128 @@
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html class='use-all-space'>
+<head>
+    <meta http-equiv='X-UA-Compatible' content='IE=Edge' />
+    <meta charset='UTF-8'>
+    <title>House Location</title>
+    <meta name='viewport'
+          content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'/>
+    <link rel='stylesheet' type='text/css' href='https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.69.1/maps/maps.css'>
+    <link rel='stylesheet' type='text/css' href="{% static '/css/maps/index.css' %}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+
+</head>
+<body>
+    <!-- ====== START OF ROW ======== -->
+    <div class="row">
+        <div class="col-md-3 p-3 d-flex justify-content-center ">
+            <div>
+                <p class="p-3">Press this button to get centralized to your position</p>
+                <button class="m-3 btn btn-dark" onclick="getLocation()">centralize location </button>
+                <p id="text"></p>
+
+
+                <ul class="mt-5" style="list-style:decimal">
+                    <li>You can drag the marker from the map to your actual house location</li>
+                    <hr>
+                    <li>Make sure you place the marker on the correct location of your house</li>
+                    <hr>
+                    <li>Click submit to add your house location</li>
+                    <hr>
+                </ul>
+                
+            </div>
+                
+        </div>
+        <div class="col-6">
+            <div id='map' class='map'></div>
+        </div>
+        <div class="col-3 d-flex justify-content-center mt-5">
+            <form action="" method="POST">
+            {% csrf_token %}
+            {{form|crispy}}
+            <input type="submit" class="btn btn-primary" value="submit">
+    </form>
+        </div>
+
+    </div>
+
+    <!-- ====== END OF ROW ===== -->
+    
+    <script src='https://api.tomtom.com/maps-sdk-for-web/cdn/5.x/5.69.1/maps/maps-web.min.js'></script>
+    <script type='text/javascript' src="{% static 'js/maps/mobile-or-tablet.js' %}"></script>
+    <script type='text/javascript' src=" {% static 'js/maps/formatters.js' %}"></script>
+    <script>
+        //set values to store longitude and latitude of the marker
+
+       const id_longitude = document.getElementById('id_longitude');
+       const id_latitude = document.getElementById('id_latitude');
+       
+
+        //Getting the current location of user
+        var text = document.getElementById("text");
+        
+    function getLocation() {
+        if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+        } else { 
+            text.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+  
+    function showPosition(position) {
+        
+        var roundLatLng = Formatters.roundLatLng;
+        const center = [position.coords.longitude, position.coords.latitude];
+        var popup = new tt.Popup({
+            offset: 35
+        });
+        var map = tt.map({
+            key: 'So6Le40CQ5Ut3T2KlAGYLCVDiPl2SW9B',
+            container: 'map',
+            style: 'tomtom://vector/1/basic-main',
+            dragPan: !isMobileOrTablet(),
+            center: center,
+            zoom: 11
+        });
+        map.addControl(new tt.FullscreenControl());
+        map.addControl(new tt.NavigationControl());
+
+        var marker = new tt.Marker({
+            draggable: true
+        }).setLngLat(center).addTo(map);
+
+        function onDragEnd() {
+            var lngLat = marker.getLngLat();
+            lngLat = new tt.LngLat(roundLatLng(lngLat.lng), roundLatLng(lngLat.lat));
+            //console.log(lngLat)
+            //console.log(id_latitude)
+            //console.log(id_longitude)
+            id_latitude.value = lngLat.lat
+            id_longitude.value = lngLat.lng
+            popup.setHTML(lngLat.toString());
+            popup.setLngLat(lngLat);
+            marker.setPopup(popup);
+            marker.togglePopup();
+        }
+
+        marker.on('dragend', onDragEnd);
+    }
+        //End of getting the current location of user
+        var map = tt.map({
+            key: 'So6Le40CQ5Ut3T2KlAGYLCVDiPl2SW9B',
+            container: 'map',
+            style: 'tomtom://vector/1/basic-main',
+            dragPan: !isMobileOrTablet(),
+            center:[-0.12634, 51.50276],
+            zoom: 6
+        });
+        map.addControl(new tt.FullscreenControl());
+        map.addControl(new tt.NavigationControl());
+      
+    </script>
+</body>
+</html>

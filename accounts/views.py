@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.views import generic
 from django.contrib.auth.forms import UserCreationForm
@@ -9,13 +10,15 @@ from .forms import   SignUpForm
 from django.contrib.auth.mixins import LoginRequiredMixin 
 import datetime
 from django.utils import timezone
+from .models import *
+
 # Create your views here.
 
 class UserRegisterView(generic.FormView):
     form_class = SignUpForm
     template_name = 'registration/register.html'
     redirect_authenticated_user = True
-    success_url = reverse_lazy('accounts:home')
+    success_url = reverse_lazy('advert:timeline')
 
     def form_valid(self,form):
         user = form.save()
@@ -25,7 +28,7 @@ class UserRegisterView(generic.FormView):
         
     def get(self , *args , **kwargs):
         if self.request.user.is_authenticated:
-            return redirect('accounts:home')
+            return redirect('advert:timeline')
         return super(UserRegisterView,self).get(*args,**kwargs)
 
 class CustomLoginView(LoginView):
@@ -35,7 +38,7 @@ class CustomLoginView(LoginView):
     now = timezone.now()
     
     def get_success_url(self):
-	    return reverse_lazy('accounts:home')
+	    return reverse_lazy('advert:timeline')
     
     def get_context_data(self,*args,**kwargs):
         now = datetime.datetime.today
@@ -50,20 +53,19 @@ class UserEditView(generic.UpdateView):
     model = UserAccount
     template_name = 'registration/edit_profile.html'
     fields = ('is_staff',)
-    success_url = reverse_lazy('accounts:profile')
+    success_url = reverse_lazy('accounts:home')
 
     def get_object(self):
         return self.request.user
 
+    
+
 
 def home(request,*arg,**kwarg):
     now = datetime.datetime.today
+
     return render(request,'pages/index.html', {"time":now})
 
-def profile_view(request):
 
-    now = datetime.datetime.today
-
-    return render(request, "pages/profile.html",{"time":now})
 
 

@@ -38,8 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     'accounts',
+    'advertisements.apps.AdvertisementsConfig',
     'crispy_forms',
+    'maps',
+    
 ]
 
 MIDDLEWARE = [
@@ -131,11 +135,8 @@ STATICFILES_DIRS =[
     os.path.join(BASE_DIR,'static')
 ]
 
-# Base url to serve media files
-MEDIA_URL = '/media/'
 
-# Path where media is stored
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -143,6 +144,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.UserAccount'
+
+MEDIA_ROOT = (BASE_DIR/'media')
+MEDIA_URL = '/media/'
+
+
+STATIC_ROOT = (BASE_DIR/"assert/")
 
 # SMTP configuration
 

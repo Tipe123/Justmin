@@ -1,0 +1,251 @@
+ 
+ :root{
+  --primary-shadow :  0 4px 6px -1px rgba(0 , 0 , 0 , 0.1);
+  --secondary-shadow : 0px 10px 6px 9px rgba(0,0,0,0.1);
+  --primary-background : #006a57;
+  --secondary-background:#0091ff;
+
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter';
+  margin-top: 20px;
+  
+}
+
+.content{
+  text-transform: capitalize;
+}
+
+body{
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+}
+.card{
+  max-width: 450px;
+  width: 100%;
+  box-shadow: var(--primary-shadow);
+  padding: 20px;
+  background: white;
+  position: relative;
+  margin: auto;
+  margin-top: 100px;
+  margin-bottom: 50px;
+}
+
+
+
+.card:before{
+ content: '';
+ height: 100%;
+ width: 100%;
+ background: var(--primary-background);
+ position: absolute;
+ left: 50%;
+ top: 50%;
+ z-index: -1;
+ transform: translate(-50%,-50%) rotate(5deg);
+ border-radius: 5px;
+ animation-name:rotateLeft ;
+ animation-duration: 5s;
+ animation-fill-mode: forwards;
+ animation-timing-function: ease-in-out;
+}
+
+.card:after{
+ content: '';
+ height: 100%;
+ width: 100%;
+ background: var(--secondary-background);
+ position: absolute;
+ left: 50%;
+ top: 50%;
+ z-index: -1;
+ transform: translate(-50%,-50%) rotate(-5deg);
+ border-radius: 5px;
+ animation-name:rotateRight ;
+ animation-duration: 5s;
+ animation-fill-mode: forwards;
+ animation-timing-function: ease-in-out;
+}
+
+@keyframes rotateRight {
+ from{
+     transform: translate(-50%,-50%) rotate( 0deg); 
+ }
+ to{
+     transform: translate(-50%,-50%) rotate(-5deg);
+ }
+}
+
+@keyframes rotateLeft {
+ from{
+     transform: translate(-50%,-50%) rotate( 0deg); 
+ }
+ to{
+     transform: translate(-50%,-50%) rotate(5deg);
+ }
+}
+
+
+.card__title{
+  font-size: 2rem;
+  text-align: center;
+}
+
+.form__input{
+ width: 100%;
+ margin-top: 1rem;
+ padding: 20px 5px;
+ border:none;
+ box-shadow: var(--secondary-shadow);
+ outline: none; /*when we select the inputbox should be not outlined */
+ font-size: 1rem;
+ transition: 0.5s;
+}
+
+.form__input:hover{
+  background-color: #eef2ff;
+}
+
+.form__button{
+  width: 100%;
+  margin-top: 2rem;
+  padding: 20px 0px;
+  border:none;
+  background-color: #0091ff;
+  color: #fff;
+  font-size: 1rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: 1s;
+}
+
+.form__button:hover{
+ letter-spacing: 1.5px;
+ box-shadow: 0px 10px 6px 9px rgba(0, 0, 0, 0.481);
+ background-color: #0091ff;
+}
+
+
+
+.card__footer{
+ margin: 2rem 0rem;
+ display: flex;
+ justify-content: space-between;
+}
+
+
+.card__footer a{
+ transition: 0.5s;
+ text-decoration: none;
+ color: #3b82f6;
+}
+
+.card__footer a:hover{
+ letter-spacing: 0.5px;
+}
+
+.card__footer a:first-child{
+ text-decoration: none;
+ color:#000;
+}
+
+/* welcome message */
+
+.welcome{
+  width: 100%;
+  margin: 20px;
+  background-color: #006a57;
+  color: white;
+  box-shadow: var(--secondary-shadow);
+  margin-top: 150px;
+  margin-left: 50px;
+  padding: 50px;
+  border-radius: 10px;
+  transition: 0.5s;
+}
+
+.welcome__message{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 18px;
+}
+.welcome:hover{
+  letter-spacing: 0.3px;
+}
+
+@media (max-width:500px){
+ .card:before{
+     width: 90%;
+     background: white;
+ }
+ .card:after{
+     width: 90px;
+     background:white;
+ }
+ .card{
+   margin: 0;
+   margin-left: -50px;
+   box-shadow: var(--secondary-shadow);
+   margin-top: 50px;
+   margin-bottom: 30px;
+ }
+ .welcome{
+   display: none;
+ }
+ .card__footer a{
+   font-size: 12px;
+ }
+
+ .strength-meter{
+  position: relative;
+  height: 1rem;
+  width: 90%;
+  border: 3px solid rgb(141, 106, 0);
+  border-radius: 1rem;
+  margin: auto;
+  overflow: hidden;
+  margin-top: 10px;
+}
+}
+
+
+/* password validation styles */
+
+.reasons > *{
+  margin-top: 0.5rem;
+  color: rgb(255, 0, 0);
+  font-size: 12px;
+}
+
+.strength-meter{
+  position: relative;
+  height: 1rem;
+  width: 90%;
+  border: 3px solid rgb(255, 190, 0);
+  border-radius: 1rem;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.strength-meter::before{
+  content: '';
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: calc( 1% * var(--strength,5));
+  background: rgb(255,190,0);
+  background: linear-gradient(90deg, rgba(255,190,0,1) 0%, rgba(226,206,6,1) 29%, rgba(255,44,0,1) 100%); 
+  transition: width 1000ms;
+}
+
+.not-the-same-reason{
+  margin-top: 0.5rem;
+  color: rgb(255, 0, 0);
+  font-size: 12px;
+}

@@ -1,0 +1,20 @@
+{% extends 'registration/another_base.html' %}
+
+
+{% block title %}
+
+Room Detail
+
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+ Room type : {{ room.type_of_room }}
+  <br>
+ Room price : R {{ room.price }}
+ {% if user.is_staff %}
+ <a href="" class="btn btn-primary">Edit</a>
+ <a href="{% url 'advert:delete' room.id %}" class="btn btn-danger">Delete</a>
+ {% endif %}
+{% endblock %}

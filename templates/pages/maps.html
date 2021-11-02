@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Pizzeria locator</title>
+    <link href='https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.6.0/maps/maps.css' rel='stylesheet'
+        type='text/css'>
+    <script src='https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.6.0/maps/maps-web.min.js'></script>
+    <link href='https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css' rel='stylesheet'>
+    <!-- <script src='stores.json' type='text/javascript'></script> -->
+    <link href="{% static 'css/pages/maps.css' %}" rel='stylesheet' type='text/css' />
+    <script src='https://code.jquery.com/jquery-1.12.4.js'></script>
+    <script src='https://code.jquery.com/ui/1.12.1/jquery-ui.js'></script>
+</head>
+
+<body>
+
+    <div class='control-panel'>
+        <div class='heading'>
+            Justmin
+        </div>
+        <div id='store-list'></div>
+    </div>
+    <div class='map' id='map'></div>
+
+
+    <script src="{% static 'js/maps.js' %}">
+        
+    </script>
+</body>
+
+</html>

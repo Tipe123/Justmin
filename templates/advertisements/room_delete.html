@@ -1,0 +1,33 @@
+{% extends 'registration/another_base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+Delete Room
+
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-6 offset-md-3">
+            <div class="border bg-white p-3">
+                <h3>Delete Room</h3>
+                <hr>
+                <div class="alert alert-danger">
+                    <h4>Are you sure you want to delete</h4>
+                </div>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{form|crispy}}
+                    <a class="btn btn-secondary" href="{% url 'advert:room_detail' item.id  %}">Cancel</a>
+                    <input type="submit" value="submit" class="btn btn-danger">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
