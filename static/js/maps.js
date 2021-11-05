@@ -38,4 +38,5 @@ map.on('load', function() {
         }
     });
 });
-    
+
+console.log(hey);

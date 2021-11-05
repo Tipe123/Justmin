@@ -26,8 +26,14 @@ def create_house_map(request, pk):
     return render(request , 'maps/create_house.html',context)
 
 def map_view(request):
+    locations = Location.objects.all()
+    houses = House.objects.all()
+    context = {
+        'locations':locations,
+        'houses':houses
+        }
+    return render(request , 'maps/maps.html' , context)
 
-    return render(request , 'pages/maps.html' )
 
 def jsonData(request):
     data = list(Location.objects.values())

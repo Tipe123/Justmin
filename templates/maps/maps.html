@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Pizzeria locator</title>
+    <link href='https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.6.0/maps/maps.css' rel='stylesheet'
+        type='text/css'>
+    <script src='https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.6.0/maps/maps-web.min.js'></script>
+    <link href='https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css' rel='stylesheet'>
+    <!-- <script src='stores.json' type='text/javascript'></script> -->
+    <link href="{% static 'css/pages/maps.css' %}" rel='stylesheet' type='text/css' />
+    <script src='https://code.jquery.com/jquery-1.12.4.js'></script>
+    <script src='https://code.jquery.com/ui/1.12.1/jquery-ui.js'></script>
+</head>
+
+<body>
+
+    <div class='control-panel'>
+        <div class='heading'>
+            Justmin
+        </div>
+        <div id='store-list'></div>
+    </div>
+    <div class='map' id='map'></div>
+
+
+    <script >
+        //we create a whole map view
+    //we display a map with thid code
+    const apiKey = 'So6Le40CQ5Ut3T2KlAGYLCVDiPl2SW9B';
+    const map = tt.map({
+        key: apiKey,
+        container: 'map',
+        center:[-0.12634, 51.50276],
+        zoom: 1
+    });
+
+    //This are the controls of the map
+    map.addControl(new tt.FullscreenControl());
+    map.addControl(new tt.NavigationControl());
+
+map.on('load', function() {
+
+    map.showTrafficFlow();
+    map.addLayer({
+        'id': 'overlay',
+        'type': 'fill',
+        'source': {
+            'type': 'geojson',
+            'data': {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Polygon',
+                    'coordinates': [[[-0.2046175878910219, 51.52327158962092],
+                        [-0.05355557617221507, 51.53523241868879],
+                        [-0.13045987304786877, 51.46299250930767]]]
+                }
+            }
+        },
+        'layout': {},
+        'paint': {
+            'fill-color': '#db356c',
+            'fill-opacity': 0.5,
+            'fill-outline-color': 'black'
+        }
+    });
+});
+
+    const markersHouse = [];
+    const list = document.getElementById('store-list');
+    {% for location in locations %}
+        {% for house in houses %}
+            {% if house.id == location.house.id %}
+              // console.log("{{house.house_name}}\n{{location.longitude}}");
+              var house_name = "{{house.house_name}}"; 
+              var numberOfRooms = "{{house.number_of_rooms}}";
+              var city  = "{{house.city}}";
+              var picture = "{{house.picture_main}}";
+              var longitude = {{location.longitude}};
+              var latitude = {{location.latitude}};
+
+              var location1 = [longitude , latitude];
+
+                var marker = new tt.Marker().setLngLat(location1).setPopup(new tt.Popup({
+                    offset:25
+                }).setHTML(`<a href="{% url 'advert:house_detail' house.id %}" >`+house_name+`</a>`)).addTo(map);
+                markersHouse.push(marker , house_name);
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+    </script>
+</body>
+
+</html>
